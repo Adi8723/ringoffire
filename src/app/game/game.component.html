@@ -3,7 +3,9 @@
   [playerAktiv]="i == game.currentPlayer"
   [ngStyle]="{ 'top.px': 10 + i * 60 }"
   class="player-position hide-desktop"
+  (click)="editplayer(i)"
   [name]="player"
+  [image]="game.playersImages[i]"
 ></app-player>
 
 <div class="scroll-container ">
@@ -12,11 +14,17 @@
     [playerAktiv]="i == game.currentPlayer"
     [ngStyle]="{ 'left.px': 15 + i * 70, 'top.px': 0 }"
     class="hide-mobile"
+    (click)="editplayer(i)"
     [name]="player"
+    [image]="game.playersImages[i]"
   ></app-player-mobile>
 </div>
 
-<div class="game-field">
+<div *ngIf="gameOver" class="game-over">
+  <img src="assets/gameOver.png" alt="">
+</div>
+
+<div *ngIf="!gameOver" class="game-field">
   <div class="card-stack">
     <!-- cardstack // karten stappel-->
     <img
@@ -55,8 +63,8 @@
   </div>
 </div>
 
-<app-game-info [card]="game.currentCard" class="game-info"></app-game-info>
+<app-game-info *ngIf="!gameOver" [card]="game.currentCard" class="game-info"></app-game-info>
 
-<button mat-fab color="primary" (click)="openDialog()" class="add-button">
+<button *ngIf="!gameOver" mat-fab color="primary" (click)="openDialog()" class="add-button">
   <mat-icon>add</mat-icon>
 </button>

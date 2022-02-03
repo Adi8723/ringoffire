@@ -5,6 +5,7 @@ import {MatDialog}  from '@angular/material/dialog';
 import { DialogAddPlayerComponent } from '../dialog-add-player/dialog-add-player.component';
 import { ActivatedRoute } from '@angular/router';
 import{AngularFirestore} from '@angular/fire/compat/firestore'
+import { EditPlayerComponent } from '../edit-player/edit-player.component';
 
 @Component({
   selector: 'app-game',
@@ -16,6 +17,7 @@ export class GameComponent implements OnInit {
   game: Game | any;
   players: any;
   gameId: string = '';
+  gameOver = false;
 
   constructor(private route: ActivatedRoute,private firestore: AngularFirestore, public dialog: MatDialog) { 
    }
@@ -38,6 +40,7 @@ export class GameComponent implements OnInit {
 			    this.game.stack = game.stack,
 			    this.game.playedCard = game.playedCard,
 			    this.game.currentPlayer = game.currentPlayer
+			    this.game.playersImages = game.playersImages
           this.game.pickCardAnimation = game.pickCardAnimation,
   			  this.game.currentCard = game.currentCard
         });
@@ -49,8 +52,14 @@ export class GameComponent implements OnInit {
     
   }
 
+  
+
+
+
   takeCard(){
-    if(!this.game.pickCardAnimation){
+    if(this.game.stack.length == 0){
+      this.gameOver = true;
+    }else if(!this.game.pickCardAnimation){
       this.game.currentCard = this.game.stack.pop();
       console.log(this.game.currentCard)
       this.game.pickCardAnimation = true;
@@ -68,12 +77,34 @@ export class GameComponent implements OnInit {
   }
   
 
+
+  editplayer(playerpucture:any){
+    const dialogRef = this.dialog.open(EditPlayerComponent);
+    dialogRef.afterClosed().subscribe((newPicture: string) => {
+      if(newPicture){
+        if(newPicture == 'DELETE'){
+          this.game.playersImages.splice(playerpucture, 1)
+          this.game.players.splice(playerpucture, 1)
+        }else{
+          this.game.playersImages[playerpucture] = newPicture;
+          this.saveGame();
+        }
+      }
+    })
+
+
+  }
+
+
+
  openDialog(): void {
     const dialogRef = this.dialog.open(DialogAddPlayerComponent);
 
     dialogRef.afterClosed().subscribe((name: string) => {
       if(name && name.length > 0){
         this.game.players.push(name);
+        this.game.playersImages.push('men1.png');
+
         this.saveGame();
       }
     });

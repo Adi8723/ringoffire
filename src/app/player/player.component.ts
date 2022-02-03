@@ -10,6 +10,7 @@ import { GameComponent } from '../game/game.component';
 export class PlayerComponent implements OnInit {
 
   @Input() name:any;
+  @Input() image = 'men1.png';
   @Input() playerAktiv:boolean = false;
 
 

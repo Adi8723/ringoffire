@@ -1,5 +1,6 @@
 export class Game{
 	public players: string[] = [];
+	public playersImages: string[] = [];
 	public stack: string[] = []; // stapel von karten
 	public playedCard: string[] = [];
 	public currentPlayer: number = 0;
@@ -23,7 +24,8 @@ export class Game{
 			playedCard:this.playedCard,
 			currentPlayer: this.currentPlayer,
 			pickCardAnimation : this.pickCardAnimation,
-  			currentCard : this.currentCard
+  			currentCard : this.currentCard,
+			playersImages : this.playersImages
 		}
 	}
 }
